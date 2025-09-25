@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -61,5 +65,27 @@ public class ProductController {
             return ResponseEntity.badRequest()
                     .body(new MessageResponse("Error: " + e.getMessage()));
         }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<ProductDTO>> searchProducts(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) Boolean status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id,asc") String[] sort
+    ) {
+        // sort = ["price,desc"] hoặc ["name,asc"]
+        Sort sortObj = Sort.by(
+                Sort.Order.by(sort[0].split(",")[0])
+                        .with(sort[0].endsWith("desc") ? Sort.Direction.DESC : Sort.Direction.ASC)
+        );
+        Pageable pageable = PageRequest.of(page, size, sortObj);
+
+        Page<ProductDTO> products = productService.searchProducts(name, categoryId, minPrice, maxPrice, status, pageable);
+        return ResponseEntity.ok(products);
     }
 }

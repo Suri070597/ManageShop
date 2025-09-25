@@ -9,6 +9,10 @@ import com.ra.shop.repository.ProductRepository;
 import com.ra.shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.ra.shop.specification.ProductSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +31,17 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<ProductDTO> searchProducts(String name, Long categoryId, Double minPrice, Double maxPrice, Boolean status, Pageable pageable) {
+        Specification<Product> spec = Specification.where(ProductSpecification.hasName(name))
+                .and(ProductSpecification.hasCategoryId(categoryId))
+                .and(ProductSpecification.hasPriceBetween(minPrice, maxPrice))
+                .and(ProductSpecification.hasStatus(status));
+
+        return productRepository.findAll(spec, pageable)
+                .map(this::convertToDTO);
     }
 
     @Override
