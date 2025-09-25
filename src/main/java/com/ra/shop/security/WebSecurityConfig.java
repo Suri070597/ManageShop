@@ -41,10 +41,21 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/categories").permitAll()
-                        .requestMatchers("/api/products").permitAll()
-                        .requestMatchers("/api/cart").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/categories/**").permitAll()
+                        .requestMatchers("/api/products/**").permitAll()
+                        .requestMatchers("/api/cart/**").permitAll()
+
+                        // ✅ Cho phép swagger + api-docs không cần token
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
+
+                        .anyRequest().authenticated()
+                )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // For H2 console
