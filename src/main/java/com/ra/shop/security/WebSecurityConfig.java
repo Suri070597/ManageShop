@@ -16,6 +16,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -80,16 +85,17 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // CORS: cho phép header Authorization để swagger gửi token từ browser
+    // cấu hình CORS ở đây
 //    @Bean
 //    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration conf = new CorsConfiguration();
-//        conf.setAllowedOriginPatterns(List.of("*")); // dev only, production nên giới hạn domain
-//        conf.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-//        conf.setAllowedHeaders(List.of("*"));
-//        conf.setAllowCredentials(true);
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // React app
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//        configuration.setAllowedHeaders(Arrays.asList("*"));
+//        configuration.setAllowCredentials(true);
+//
 //        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", conf);
+//        source.registerCorsConfiguration("/api/**", configuration);
 //        return source;
 //    }
 }
