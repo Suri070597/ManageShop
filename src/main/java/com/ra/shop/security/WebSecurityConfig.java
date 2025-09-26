@@ -85,7 +85,7 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // cấu hình CORS ở đây
+    // Cấu hình CORS cho FE React
 //    @Bean
 //    public CorsConfigurationSource corsConfigurationSource() {
 //        CorsConfiguration configuration = new CorsConfiguration();
