@@ -79,4 +79,17 @@ public class WebSecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    // CORS: cho phép header Authorization để swagger gửi token từ browser
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration conf = new CorsConfiguration();
+//        conf.setAllowedOriginPatterns(List.of("*")); // dev only, production nên giới hạn domain
+//        conf.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+//        conf.setAllowedHeaders(List.of("*"));
+//        conf.setAllowCredentials(true);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", conf);
+//        return source;
+//    }
 }
